@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/fasttravel"
+            android:title="Principal"
+            ></item>
+        <item
+            android:id="@+id/nav_profileActivity"
+            android:icon="@drawable/user"
+            android:title="Mi perfil" />
+        <item
+            android:id="@+id/nav_findJourneys"
+            android:icon="@drawable/flight"
+            android:title="Buscar vuelos" />
+        <item
+            android:id="@+id/nav_myReservation"
+            android:icon="@drawable/reservation"
+            android:title="Mis reservaciones" />
+
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_plane"
+            android:title="Tipos de avión" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout" />
+    </group>
+</menu>

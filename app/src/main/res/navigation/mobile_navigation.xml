@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_home">
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.lab04.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.lab04.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.lab04.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/planetypeFragment"
+        android:name="com.lab04.PlanetypeFragment"
+        android:label="fragment_planetype"
+        tools:layout="@layout/fragment_planetype" />
+    <fragment
+        android:id="@+id/nav_findJourneys"
+        android:name="com.airline.ui.reservation.ReservationFragment"
+        android:label="ReservationFragment"
+        tools:layout="@layout/fragment_reservation"/>
+    <activity
+        android:id="@+id/nav_checkoutActivity"
+        android:name="com.airline.ui.checkout.CheckoutActivity"
+        android:label="CheckoutActivity"
+        tools:layout="@layout/activity_checkout"/>
+    <activity
+        android:id="@+id/nav_myReservation"
+        android:name="com.airline.ui.myReservations.MyReservation"
+        android:label="MyReservation"
+        tools:layout="@layout/activity_my_reservation"/>
+    <activity
+        android:id="@+id/nav_profileActivity"
+        android:name="com.airline.ui.profile.ProfileActivity"
+        android:label="activity_profile"
+        tools:layout="@layout/activity_profile" />
+</navigation>
