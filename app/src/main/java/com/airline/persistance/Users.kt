@@ -1,6 +1,7 @@
 package com.lab04.persistance
 
 import com.lab04.logic.User
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -32,7 +33,7 @@ class Users {
             "std",
             "Alex",
             "Brenes",
-            Date(),
+            "2000-04-12T06:00:00.000Z",
             "Alajuela",
             "",
             "",
@@ -45,7 +46,7 @@ class Users {
             "admin",
             "Alex",
             "Brenes",
-            Date(),
+            "2000-04-12T06:00:00.000Z",
             "Alajuela",
             "",
             "",

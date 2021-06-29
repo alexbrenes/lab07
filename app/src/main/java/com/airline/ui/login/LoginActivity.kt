@@ -43,23 +43,23 @@ class LoginActivity : AppCompatActivity() {
 
         login.setOnClickListener {
 
-            val email = username.text;
-            val password = password.text;
+            val email = username.text
+            val password = password.text
 
             var loginState = loginViewModel.login(email.toString(), password.toString())
 
-            if (loginState) {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("user", loginViewModel.user)
-                startActivity(intent)
-            } else {
-                val toast = Toast.makeText(
-                    applicationContext,
-                    "Credenciales incorrectas",
-                    Toast.LENGTH_SHORT
-                )
-                toast.show()
-            }
+//            if (loginState) {
+//                val intent = Intent(this, MainActivity::class.java)
+//                intent.putExtra("user", loginViewModel.user)
+//                startActivity(intent)
+//            } else {
+//                val toast = Toast.makeText(
+//                    applicationContext,
+//                    "Credenciales incorrectas",
+//                    Toast.LENGTH_SHORT
+//                )
+//                toast.show()
+//            }
 
         }
 

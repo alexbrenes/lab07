@@ -1,40 +1,40 @@
-package com.lab04.ui.login
+package com.airline.ui.signup
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.airline.*
 import com.google.gson.Gson
 import com.lab04.logic.User
-import com.lab04.persistance.Users
 import io.ktor.client.*
-import kotlinx.coroutines.channels.Channel
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import java.util.*
 
-class LoginViewModel : ViewModel() {
+class SignupViewModel : ViewModel() {
 
     var client: HttpClient? = null
-    var user: MutableLiveData<User>
+    var user: MutableLiveData<User> = MutableLiveData()
     val outputEventChannel: Channel<String> = Channel(10)
     val inputEventChannel: Channel<String> = Channel(10)
 
     init {
-        user = MutableLiveData()
+        user.value = null
     }
 
     fun open(coroutineScope: CoroutineScope) {
-        client = buildClient()
+        client = HttpClient {
+            install(WebSockets)
+        }
         coroutineScope.launch {
+            Log.d("SignUpWebSocket", "LAUNCH")
             client!!.webSocket(
-                path = PATH_LOGIN,
+                path = PATH_SIGNUP,
                 host = HOST,
                 port = PORT
             ) {
@@ -46,13 +46,6 @@ class LoginViewModel : ViewModel() {
             client?.close()
         }
     }
-
-    fun close() {
-        Log.d("onClose", "onClose")
-        client?.close()
-        client = null
-    }
-
 
     private suspend fun DefaultClientWebSocketSession.input() {
         try {
@@ -70,16 +63,11 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    private fun parseRes(res: String) {
-        val gson = Gson()
-        val properties = gson.fromJson(res, Properties::class.java)
-        user.postValue(gson.fromJson(properties.getProperty("data"), User::class.java))
-    }
-
     private suspend fun DefaultClientWebSocketSession.output() {
+        Log.d("OUTPUT_SIGNUP", "output")
         try {
             outputEventChannel.consumeEach {
-                Log.d("onOutput", it)
+                Log.d("SEND_signUp", it)
                 send(it)
             }
         } catch (e: Throwable) {
@@ -87,23 +75,37 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    private fun buildClient() = HttpClient {
-        install(WebSockets)
+    private fun parseRes(res: String) {
+        Log.d("RESPONSE_SIGNUP", res)
+        val gson = Gson()
+        val properties = gson.fromJson(res, Properties::class.java)
+        if (properties.containsKey("action")) {
+            if (properties.getProperty("action") == "login")
+                user.postValue(gson.fromJson(properties.getProperty("data"), User::class.java))
+        } else {
+            user.postValue(null)
+        }
     }
 
-    fun login(email: String, password: String) {
+
+    fun signUp(user: User) {
         viewModelScope.launch {
             val gson = Gson()
             val req = Properties()
-            req.put("email", email)
-            req.put("password", password)
-            req.put("action", "login")
+            req.put("data", gson.toJson(user))
+            req.put("action", "addUser")
             outputEventChannel.send(gson.toJson(req))
         }
     }
 
+    fun close() {
+        Log.d("onClose", "onClose")
+        client?.close()
+        client = null
+    }
+
     companion object {
-        private const val PATH_LOGIN = "$PATH_APP/airline"
+        private const val PATH_SIGNUP = "$PATH_APP/signUp"
     }
 
 }

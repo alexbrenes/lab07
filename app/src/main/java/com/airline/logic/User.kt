@@ -9,7 +9,7 @@ class User : Serializable {
     var password: String
     var name: String
     var lastname: String
-    var birthday: Date
+    var birthday: String
     var address: String
     var workphone: String
     var phone: String
@@ -20,7 +20,7 @@ class User : Serializable {
         password: String,
         name: String,
         lastname: String,
-        birthday: Date,
+        birthday: String,
         address: String,
         workphone: String,
         phone: String,
@@ -38,12 +38,32 @@ class User : Serializable {
     }
 
     constructor(
+        email: String,
+        password: String,
+        name: String,
+        lastname: String,
+        birthday: String,
+        address: String,
+        phone: String,
+        workphone: String
+    ) {
+        this.email = email
+        this.password = password
+        this.name = name
+        this.lastname = lastname
+        this.birthday = birthday
+        this.address = address
+        this.workphone = workphone
+        this.phone = phone
+    }
+
+    constructor(
         iduser: Int,
         email: String,
         password: String,
         name: String,
         lastname: String,
-        birthday: Date,
+        birthday: String,
         address: String,
         workphone: String,
         phone: String,
@@ -63,7 +83,7 @@ class User : Serializable {
 
     constructor()
 
-    constructor(email : String, password: String){
+    constructor(email: String, password: String) {
         this.email = email
         this.password = password
     }
@@ -74,13 +94,12 @@ class User : Serializable {
         password = ""
         name = ""
         lastname = ""
-        birthday = Date()
+        birthday = "2000-04-12T06:00:00.000Z"
         address = ""
         workphone = ""
         phone = ""
         isadmin = '0'
     }
-
 
 
 }
