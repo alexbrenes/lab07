@@ -31,8 +31,8 @@
     <string name="city">Ciudad</string>
     <string name="dates">Fechas</string>
     <string name="round_trip">Ida y Vuelta</string>
-    <string name="departure_date">Fecha de Ida</string>
-    <string name="return_date">Fecha de Regreso</string>
+    <string name="departure_date">Fecha de Ida (yyyy-MM-dd)</string>
+    <string name="return_date">Fecha de Regreso (yyyy-MM-dd)</string>
     <string name="passagers_amount">Cantidad de Pasajeros</string>
     <string name="search">Buscar</string>
     <!-- CHECKOUT VALUES -->

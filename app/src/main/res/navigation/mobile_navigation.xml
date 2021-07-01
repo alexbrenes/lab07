@@ -46,4 +46,23 @@
         android:name="com.airline.ui.profile.ProfileActivity"
         android:label="activity_profile"
         tools:layout="@layout/activity_profile" />
+    <fragment
+        android:id="@+id/myReservationsFragment"
+        android:name="com.airline.ui.myReservations.MyReservationsFragment"
+        android:label="fragment_myreservations"
+        tools:layout="@layout/fragment_myreservations" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.airline.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <activity
+        android:id="@+id/seatSelection"
+        android:name="com.example.lab_04_app.SeatSelection"
+        android:label="SeatSelection" />
+    <activity
+        android:id="@+id/summaryResActivity"
+        android:name="com.airline.ui.summaryReservation.SummaryResActivity"
+        android:label="activity_summary_res"
+        tools:layout="@layout/activity_summary_res" />
 </navigation>

@@ -22,23 +22,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import java.util.*
 import kotlin.collections.ArrayList
 
 class HomeViewModel : ViewModel() {
 
     var archived: ArrayList<Journey>
-    var flag = false
     var client: HttpClient? = null
-    var journeys: Journeys
-    var journeysL: MutableLiveData<ArrayList<Journey>> = MutableLiveData()
+    var journeys: MutableLiveData<ArrayList<Journey>> = MutableLiveData()
     val outputEventChannel: Channel<String> = Channel(10)
     val inputEventChannel: Channel<String> = Channel(10)
+    var user: User? = null
 
     init {
         archived = ArrayList()
-        journeys = Journeys.instance
-        journeysL.value = ArrayList()
+        journeys.value = ArrayList()
     }
 
     fun open(coroutineScope: CoroutineScope) {
@@ -51,7 +50,6 @@ class HomeViewModel : ViewModel() {
                 host = HOST,
                 port = PORT
             ) {
-                Log.d("TU MAI", "MIS CANCIONES")
                 getOfferJourneys()
                 val input = launch { output() }
                 val output = launch { input() }
@@ -110,35 +108,16 @@ class HomeViewModel : ViewModel() {
         val properties = gson.fromJson(res, Properties::class.java)
         if (properties.containsKey("action"))
             if (properties.getProperty("action") == "getSpecialJourneys") {
-                Log.d("SPECIAL JOURNEYS", "BEFORE")
-                val specialJourneysJSON =
-                    gson.fromJson(
-                        properties.getProperty("data"),
-                        ArrayList::class.java
-                    ) as ArrayList<String>
-                val specialJourneys = ArrayList<Journey>()
-                for (journey in specialJourneysJSON) {
-                    specialJourneys.add(gson.fromJson(journey, Journey::class.java))
-                }
-                Log.d("SPECIAL JOURNEYS", "AFTER " + specialJourneysJSON[0])
+                val jsonArray = JSONArray(properties.getProperty("data"))
+                val arrayList = ArrayList<Journey>()
+                for (i in 0 until jsonArray.length())
+                    arrayList.add(gson.fromJson(jsonArray.getString(i), Journey::class.java))
+                journeys.postValue(arrayList)
             }
-        //user.postValue(gson.fromJson(properties.getProperty("data"), User::class.java))
-    }
-
-//    fun delete(journey: Journey, position: Int) {
-//        archived.add(journey)
-//        journeys.delete(position)
-//    }
-
-
-    fun undo(position: Int) {
-        if (archived.size <= 0)
-            return
-        journeys.add(archived.get(archived.size - 1), position)
     }
 
     fun at(idx: Int): Journey {
-        return journeys.items.value?.get(idx)!!
+        return journeys.value?.get(idx)!!
     }
 
     companion object {

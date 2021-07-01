@@ -17,10 +17,10 @@ class AdapterJourney :
 
     class ViewHolder(val binding: ItemJourneyBinding) : RecyclerView.ViewHolder(binding.root) {
         fun render(journey: Journey) {
-            binding.destination.text = journey.flight.destination.name
-            binding.origin.text = journey.flight.origin.name
-            binding.flightPrice.text = ("" + journey.specialPrice)
-            binding.availability.text = ("₡ " + journey.availability)
+            binding.destination.text = journey.flightIdflight!!.destination!!.name
+            binding.origin.text = journey.flightIdflight!!.origin!!.name
+            binding.availability.text = ("" + journey.availability)
+            binding.flightPrice.text = ("₡ " + journey.specialPrice)
         }
     }
 

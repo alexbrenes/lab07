@@ -7,11 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -23,16 +20,19 @@ import com.airline.ui.home.AdapterJourney
 import com.google.android.material.snackbar.Snackbar
 import com.lab04.R
 import com.lab04.databinding.FragmentHomeBinding
+import com.lab04.logic.User
 import com.lab04.ui.gallery.AdapterPlaneType
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class HomeFragment : Fragment() {
+
     private var position: Int = 0
     private var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdapterJourney
+
 
     init {
         homeViewModel = HomeViewModel()
@@ -49,6 +49,9 @@ class HomeFragment : Fragment() {
         recyclerView = binding.rvJourneyOffer
         recyclerView.setHasFixedSize(true)
 
+        val bundle = requireActivity().intent.extras
+        val user = bundle?.get("user") as User
+        homeViewModel.user = user
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -64,13 +67,13 @@ class HomeFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                 position = viewHolder.adapterPosition
-                var journey = homeViewModel.at(position)
-
                 val bundle = bundleOf(
-                    "journey" to homeViewModel.at(position)
+                    "journey" to homeViewModel.at(position),
+                    "user" to homeViewModel.user
                 )
                 view?.findNavController()?.navigate(R.id.nav_checkoutActivity, bundle)
-                adapter.notifyItemChanged(position);
+
+                adapter.notifyItemChanged(position)
             }
 
             override fun onChildDraw(
@@ -130,7 +133,7 @@ class HomeFragment : Fragment() {
 
     private fun OnInitViewmodel(adapter: AdapterJourney) {
         this.adapter = adapter
-        homeViewModel.journeys.items.observe(viewLifecycleOwner) { items ->
+        homeViewModel.journeys.observe(viewLifecycleOwner) { items ->
             adapter.items = items
         }
     }

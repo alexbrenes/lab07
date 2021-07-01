@@ -4,9 +4,10 @@ import java.io.Serializable
 
 class Country : Serializable {
 
-    var idcountry: Int
-    var abbreviation: String
-    var name: String
+    var idcountry: Int? = null
+    var abbreviation: String? = null
+    var name: String? = null
+    var cityList: List<City>? = null
 
     constructor(abbreviation: String, name: String) {
         idcountry = 0
@@ -21,14 +22,19 @@ class Country : Serializable {
     }
 
     constructor()
+    constructor(idcountry: Int?, abbreviation: String?, name: String?, cityList: List<City>?) {
+        this.idcountry = idcountry
+        this.abbreviation = abbreviation
+        this.name = name
+        this.cityList = cityList
+    }
 
-    init{
+    init {
         idcountry = 0
         abbreviation = ""
         name = ""
     }
 //    private val cityList: List<City>? = null
-
 
 
 }

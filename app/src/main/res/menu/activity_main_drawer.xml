@@ -10,7 +10,7 @@
             android:title="Principal"
             ></item>
         <item
-            android:id="@+id/nav_profileActivity"
+            android:id="@+id/profileFragment"
             android:icon="@drawable/user"
             android:title="Mi perfil" />
         <item
@@ -18,7 +18,7 @@
             android:icon="@drawable/flight"
             android:title="Buscar vuelos" />
         <item
-            android:id="@+id/nav_myReservation"
+            android:id="@+id/myReservationsFragment"
             android:icon="@drawable/reservation"
             android:title="Mis reservaciones" />
 

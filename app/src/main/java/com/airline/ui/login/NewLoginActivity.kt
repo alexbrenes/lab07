@@ -34,12 +34,14 @@ class NewLoginActivity : AppCompatActivity() {
 
         loginViewModel = LoginViewModel()
 
-        loginViewModel.user.observe(this) { user ->
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("user", loginViewModel.user.value)
-            startActivity(intent)
-        }
 
+        loginViewModel.user.observe(this) {
+            if (it != null) {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("user", it)
+                startActivity(intent)
+            }
+        }
         binding = ActivityNewLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val username = binding.username
@@ -53,25 +55,10 @@ class NewLoginActivity : AppCompatActivity() {
         }
 
         login.setOnClickListener {
-
             val email = username.text
             val password = password.text
 
             loginViewModel.login(email.toString(), password.toString())
-
-//            if (loginState) {
-//                val intent = Intent(this, MainActivity::class.java)
-//                intent.putExtra("user", loginViewModel.user)
-//                startActivity(intent)
-//            } else {
-//                val toast = Toast.makeText(
-//                    applicationContext,
-//                    "Credenciales incorrectas",
-//                    Toast.LENGTH_SHORT
-//                )
-//                toast.show()
-//            }
-
         }
 
     }

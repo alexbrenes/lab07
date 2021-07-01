@@ -6,11 +6,12 @@ import java.io.Serializable
 
 class Reservation : Serializable {
 
-    var idreservation: Int
-    var seats: Int
-    var journey: Journey
-    var paymentMethod: Paymentmethod
-    var user: User
+    var idreservation: Int? = null
+    var seats: Int? = null
+    var journeyIdjourney: Journey? = null
+    var paymentmethodIdpaymentmethod: Paymentmethod? = null
+    var userIduser: User? = null
+    var ticketList: List<Ticket>? = null
 
     constructor(
         idreservation: Int,
@@ -21,9 +22,9 @@ class Reservation : Serializable {
     ) {
         this.idreservation = idreservation
         this.seats = seats
-        this.journey = journey
-        this.paymentMethod = paymentMethod
-        this.user = user
+        this.journeyIdjourney = journey
+        this.paymentmethodIdpaymentmethod = paymentMethod
+        this.userIduser = user
     }
 
     constructor(idreservation: Int) {
@@ -31,15 +32,29 @@ class Reservation : Serializable {
     }
 
     constructor()
+    constructor(
+        idreservation: Int?,
+        seats: Int?,
+        journeyIdjourney: Journey?,
+        paymentmethodIdpaymentmethod: Paymentmethod?,
+        userIduser: User?,
+        ticketList: List<Ticket>?
+    ) {
+        this.idreservation = idreservation
+        this.seats = seats
+        this.journeyIdjourney = journeyIdjourney
+        this.paymentmethodIdpaymentmethod = paymentmethodIdpaymentmethod
+        this.userIduser = userIduser
+        this.ticketList = ticketList
+    }
 
     init {
         idreservation = 0
         seats = 0
-        journey = Journey()
-        paymentMethod = Paymentmethod()
-        user = User()
+        journeyIdjourney = Journey()
+        paymentmethodIdpaymentmethod = Paymentmethod()
+        userIduser = User()
     }
-
 
 
 }

@@ -53,7 +53,6 @@ class LoginViewModel : ViewModel() {
         client = null
     }
 
-
     private suspend fun DefaultClientWebSocketSession.input() {
         try {
             for (frame in incoming) {

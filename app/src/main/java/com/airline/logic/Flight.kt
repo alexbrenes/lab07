@@ -4,13 +4,15 @@ import java.io.Serializable
 import java.util.*
 
 class Flight : Serializable {
-    var idflight: Int
-    var day: String
-    var hour: Date
-    var destination: City
-    var origin: City
-    var planeIdplane: Plane
-
+    
+    var idflight: Int? = null
+    var day: String? = null
+    var hour: Date? = null
+    var journeyList: List<Journey>? = null
+    var destination: City? = null
+    var origin: City? = null
+    var planeIdplane: Plane? = null
+    
     constructor(){
         origin = City(0,"San José",Country())
         destination = City(1, "Berlín", Country())
@@ -33,6 +35,24 @@ class Flight : Serializable {
 
     constructor(idflight: Int) {
         this.idflight = idflight
+    }
+
+    constructor(
+        idflight: Int?,
+        day: String?,
+        hour: Date?,
+        journeyList: List<Journey>?,
+        destination: City?,
+        origin: City?,
+        planeIdplane: Plane?
+    ) {
+        this.idflight = idflight
+        this.day = day
+        this.hour = hour
+        this.journeyList = journeyList
+        this.destination = destination
+        this.origin = origin
+        this.planeIdplane = planeIdplane
     }
 
     init {

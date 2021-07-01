@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_slideshow,
                 R.id.nav_myReservation,
                 R.id.nav_findJourneys,
-                R.id.nav_profileActivity
+                R.id.nav_profileActivity,
+                R.id.myReservationsFragment,
+                R.id.profileFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

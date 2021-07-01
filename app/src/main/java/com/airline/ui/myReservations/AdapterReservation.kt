@@ -21,8 +21,10 @@ class AdapterReservation
 
     class ViewHolder(val binding: ItemReservationBinding) : RecyclerView.ViewHolder(binding.root) {
         fun render(reservation: Reservation) {
-            binding.destinationRes.text = reservation.journey.destination.countryIdcountry.name
-            binding.originRes.text = reservation.journey.origin.countryIdcountry.name
+            binding.destinationRes.text =
+                reservation.journeyIdjourney?.flightIdflight?.destination?.countryIdcountry?.name
+            binding.originRes.text =
+                reservation.journeyIdjourney?.flightIdflight?.origin?.countryIdcountry?.name
             binding.idreservation.text = ("" + reservation.idreservation)
             binding.seatsRes.text = ("" + reservation.seats)
         }

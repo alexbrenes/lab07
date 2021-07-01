@@ -5,17 +5,17 @@ import java.util.*
 
 class Journey : Serializable {
 
-    var idjourney: Int
-    var date: Date
+    var idjourney: Int? = null
+    var date: Date? = null
     var price = 0.0
-    var availability: Int
-    var flight: Flight
-    var isSpecialOffer: Char
+    var availability: Int? = null
+    var flightIdflight: Flight? = null
+    var reservationList: List<Reservation>? = null
+    var isSpecialOffer: Char? = null
     var specialPrice = 0f
-    var isRoundTrip: Char
-    var backdate: Date
-    var origin: City
-    var destination: City
+    var isRoundTrip: Char? = null
+    var backdate: Date? = null
+
     constructor(
         idjourney: Int,
         date: Date,
@@ -31,7 +31,7 @@ class Journey : Serializable {
         this.date = date
         this.price = price
         this.availability = availability
-        this.flight = flight
+        this.flightIdflight = flight
         this.isSpecialOffer = isSpecialOffer
         this.specialPrice = specialPrice
         this.isRoundTrip = isRoundTrip
@@ -40,20 +40,41 @@ class Journey : Serializable {
 
     constructor(idjourney: Int) {
         this.idjourney = idjourney
-        flight = Flight()
+        flightIdflight = Flight()
     }
 
     constructor()
+    constructor(
+        idjourney: Int?,
+        date: Date?,
+        price: Double,
+        availability: Int?,
+        flightIdflight: Flight?,
+        reservationList: List<Reservation>?,
+        isSpecialOffer: Char?,
+        specialPrice: Float,
+        isRoundTrip: Char?,
+        backdate: Date?
+    ) {
+        this.idjourney = idjourney
+        this.date = date
+        this.price = price
+        this.availability = availability
+        this.flightIdflight = flightIdflight
+        this.reservationList = reservationList
+        this.isSpecialOffer = isSpecialOffer
+        this.specialPrice = specialPrice
+        this.isRoundTrip = isRoundTrip
+        this.backdate = backdate
+    }
 
     init {
-        destination = City()
-        origin = City()
         idjourney = 0
         date = Date()
         isRoundTrip = '0'
         backdate = Date()
         isSpecialOffer = '0'
-        flight = Flight()
+        flightIdflight = Flight()
         availability = 0
         price = 0.0
     }
