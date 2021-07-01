@@ -42,11 +42,6 @@ class AdapterReservation
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.render(items[position])
-        holder.itemView.setOnClickListener {
-            val intent = Intent(holder.binding.seatsRes.context, SeatSelection::class.java)
-            intent.putExtra("reservation", items[position])
-            holder.binding.seatsRes.context.startActivity(intent)
-        }
     }
 
     override fun getItemCount(): Int = items.size

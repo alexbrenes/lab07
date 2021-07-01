@@ -111,8 +111,8 @@ class MyReservationsFragment : Fragment() {
                     actionState,
                     isCurrentlyActive
                 )
-                    .addSwipeLeftBackgroundColor(Color.parseColor("#FF03DAC5"))
-                    .addSwipeRightBackgroundColor(Color.parseColor("#FF03DAC5"))
+                    .addSwipeLeftBackgroundColor(Color.parseColor("#ed8ab4"))
+                    .addSwipeRightBackgroundColor(Color.parseColor("#ed8ab4"))
                     .create()
                     .decorate()
                 super.onChildDraw(

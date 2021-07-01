@@ -34,7 +34,7 @@ class ProfileFragment : Fragment() {
 
         binding.emailProfile.text = user.email
         binding.newPasswordProfile.setText(user.password)
-        binding.birthdayProfile.setText(user.birthday)
+        binding.birthdayProfile.setText("2000-04-12")
         binding.telephoneWorkProfile.setText(user.workphone)
         binding.telephonePersonalProfile.setText(user.phone)
         binding.lastnameProfile.setText(user.lastname)

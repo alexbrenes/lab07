@@ -82,27 +82,37 @@ class MyReservationViewModel : ViewModel() {
         val gson = Gson()
         val properties = gson.fromJson(res, Properties::class.java)
         if (properties.containsKey("action"))
-            if (properties.getProperty("action") == "getMyReservations") {
-                Log.d("MY_RESERVATIONS", properties.getProperty("data"))
-                val jsonArray = JSONArray(properties.getProperty("data"))
-                val jsonArrayCurrent = JSONArray(jsonArray.getString(0))
-                val jsonArrayOld = JSONArray(jsonArray.getString(1))
-                val arrayListCurrent = ArrayList<Reservation>()
-                val arrayListOld = ArrayList<Reservation>()
-                for (i in 0 until jsonArrayCurrent.length())
-                    arrayListCurrent.add(
-                        gson.fromJson(
-                            jsonArrayCurrent.getString(i),
-                            Reservation::class.java
+            when (properties.getProperty("action")) {
+                "getMyReservations" -> {
+                    Log.d("MY_RESERVATIONS", properties.getProperty("data"))
+                    val jsonArray = JSONArray(properties.getProperty("data"))
+                    val jsonArrayCurrent = JSONArray(jsonArray.getString(0))
+                    val jsonArrayOld = JSONArray(jsonArray.getString(1))
+                    val arrayListCurrent = ArrayList<Reservation>()
+                    val arrayListOld = ArrayList<Reservation>()
+                    for (i in 0 until jsonArrayCurrent.length())
+                        arrayListCurrent.add(
+                            gson.fromJson(
+                                jsonArrayCurrent.getString(i),
+                                Reservation::class.java
+                            )
                         )
-                    )
-                for (i in 0 until jsonArrayOld.length())
-                    arrayListOld.add(gson.fromJson(jsonArrayOld.getString(i), Reservation::class.java))
-                Log.d("ARRAYLIST CURRENT", "" + arrayListCurrent.size)
-                Log.d("ARRAYLIST OLD", "" + arrayListOld.size)
+                    for (i in 0 until jsonArrayOld.length())
+                        arrayListOld.add(
+                            gson.fromJson(
+                                jsonArrayOld.getString(i),
+                                Reservation::class.java
+                            )
+                        )
+                    Log.d("ARRAYLIST CURRENT", "" + arrayListCurrent.size)
+                    Log.d("ARRAYLIST OLD", "" + arrayListOld.size)
 
-                currentReservations.postValue(arrayListCurrent)
-                oldReservations.postValue(arrayListOld)
+                    currentReservations.postValue(arrayListCurrent)
+                    oldReservations.postValue(arrayListOld)
+                }
+                "updateReservationsRes" -> {
+                    getMyReservations()
+                }
             }
     }
 
