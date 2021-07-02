@@ -14,15 +14,19 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.airline.logic.Reservation
+import com.airline.logic.Ticket
 import com.airline.ui.seatselection.SeatSelectionViewModel
 import com.lab04.databinding.ActivitySeatSelectionBinding
 import com.lab04.logic.User
+import kotlinx.coroutines.channels.ticker
+import kotlin.math.asin
 
 class SeatSelection : AppCompatActivity() {
 
     private lateinit var binding: ActivitySeatSelectionBinding
     private val seatSelectionViewModel: SeatSelectionViewModel = SeatSelectionViewModel()
     val asientos = mutableListOf<String>()
+    val reservedSeats = ArrayList<String>()
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,13 +45,53 @@ class SeatSelection : AppCompatActivity() {
                 reservation.journeyIdjourney?.flightIdflight?.planeIdplane?.planetypeIdplanetype!!.seatsperrow
             )
         }
+
+        ////
+        seatSelectionViewModel.outReserved.observe(this) {
+            val filas =
+                seatSelectionViewModel.reservation!!.journeyIdjourney?.flightIdflight?.planeIdplane?.planetypeIdplanetype!!.rows
+            reservedSeats.forEach {
+                if (isRes(asientos.toList(), it)){
+                    val j = if (it.length > 2)
+                        (it[0] + "" + it[1]).toInt()
+                    else
+                        it[0].toInt() - 48
+                    val i = it[it.length - 1].toInt() - 64
+                    val btn =
+                        findViewById<Button>(j * filas + i)
+                    btn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#ed8ab4"))
+                }
+            }
+            it.forEach {
+                val j = if (it.idseat.length > 2)
+                    (it.idseat[0] + "" + it.idseat[1]).toInt()
+                else
+                    it.idseat[0].toInt() - 48
+                val i = it.idseat[it.idseat.length - 1].toInt() - 64
+                val btn =
+                    findViewById<Button>(j * filas + i)
+                if (asientos.indexOf(it.idseat) == -1) {
+                    reservedSeats.add(it.idseat)
+                    btn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#c499a9"))
+                }
+            }
+        }
+        ////
+
+    }
+
+    private fun isRes(arr: List<String>, ticket: String): Boolean {
+        arr.forEach {
+            if (it == ticket)
+                return true
+        }
+        return false
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun cargarAsientos(filas: Int, columnas: Int) {
 
         var cant: TextView = binding.tvCantidad
-        Log.d("SIZE_TICKETS", "" + seatSelectionViewModel.reservation!!.ticketList!!.size)
         var cantidadA: Int =
             if (seatSelectionViewModel.reservation!!.ticketList!!.size == 0)
                 seatSelectionViewModel.reservation!!.seats!!
@@ -63,6 +107,7 @@ class SeatSelection : AppCompatActivity() {
             layout.orientation = LinearLayout.HORIZONTAL
             for (i in 1..columnas) {
                 val btn: Button = Button(applicationContext)
+
                 btn.layoutParams = LinearLayout.LayoutParams(150, 110)
                 if (seatSelectionViewModel.isReserved(j.toString() + (i + 64).toChar())) {
                     btn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#c499a9"))
@@ -71,15 +116,9 @@ class SeatSelection : AppCompatActivity() {
                 }
                 btn.tag = (j.toString() + (i + 64).toChar())
                 btn.setText(j.toString() + (i + 64).toChar())
+                btn.id = j * filas + i
                 layout.addView(btn)
                 btn.setOnClickListener {
-                    Log.d("HEX", Integer.toHexString(btn.backgroundTintList!!.defaultColor))
-                    Log.d("HEX", Integer.toHexString(14954612))
-                    Log.d("IS_RESERVED", (i + 64).toChar() + j.toString())
-                    Log.d(
-                        "IS_RESERVED",
-                        "" + seatSelectionViewModel.isReserved((i + 64).toChar() + j.toString())
-                    )
 
                     if (seatSelectionViewModel.isReserved(j.toString() + (i + 64).toChar())) {
                         btn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#c499a9"))
@@ -102,9 +141,11 @@ class SeatSelection : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         seatSelectionViewModel.open(lifecycleScope)
+        seatSelectionViewModel.openSeats(lifecycleScope)
 
         binding.reserveBtn.setOnClickListener {
             seatSelectionViewModel.reserveSeats(asientos)
+            finish()
         }
 
     }

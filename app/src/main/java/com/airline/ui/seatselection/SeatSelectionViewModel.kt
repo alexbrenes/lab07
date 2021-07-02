@@ -28,9 +28,13 @@ class SeatSelectionViewModel : ViewModel() {
     var reservedSeats: MutableLiveData<ArrayList<Ticket>> = MutableLiveData()
     var user: User? = null
     var client: HttpClient? = null
+    var clientSeats: HttpClient? = null
     var reservation: Reservation? = null
     val outputEventChannel: Channel<String> = Channel(10)
+    val outputEventChannelSeats: Channel<String> = Channel(10)
     val inputEventChannel: Channel<String> = Channel(10)
+    val outReserved: MutableLiveData<ArrayList<Ticket>> = MutableLiveData()
+
 
     fun open(coroutineScope: CoroutineScope) {
         client = HttpClient {
@@ -44,6 +48,58 @@ class SeatSelectionViewModel : ViewModel() {
             ) {
                 getReservedSeats()
                 val input = launch { output() }
+                val output = launch { input() }
+                input.join()
+                output.join()
+            }
+            client?.close()
+        }
+    }
+
+    fun addReserved(ticket: String) {
+        viewModelScope.launch {
+            val gson = Gson()
+
+            val properties = Properties()
+            val ticketProp = Properties()
+
+            ticketProp["idseat"] = ticket
+
+            properties["action"] = "addSeat"
+            properties["data"] = gson.toJson(ticketProp)
+
+            outputEventChannelSeats.send(gson.toJson(properties))
+        }
+    }
+
+    fun removeReserved(ticket: String) {
+        viewModelScope.launch {
+            val gson = Gson()
+
+            val properties = Properties()
+            val ticketProp = Properties()
+
+            ticketProp["idseat"] = ticket
+
+            properties["action"] = "removeSeat"
+            properties["data"] = gson.toJson(ticketProp)
+
+            outputEventChannelSeats.send(gson.toJson(properties))
+        }
+    }
+
+    fun openSeats(coroutineScope: CoroutineScope) {
+        clientSeats = HttpClient {
+            install(WebSockets)
+        }
+        coroutineScope.launch {
+            clientSeats!!.webSocket(
+                path = PATH_SEATS + "/" + reservation!!.journeyIdjourney!!.idjourney,
+                host = HOST,
+                port = PORT
+            ) {
+                Log.d("onOpen", "SEATS WS")
+                val input = launch { outputSeats() }
                 val output = launch { input() }
                 input.join()
                 output.join()
@@ -69,6 +125,17 @@ class SeatSelectionViewModel : ViewModel() {
         try {
             outputEventChannel.consumeEach {
                 Log.d("onOutput", it)
+                send(it)
+            }
+        } catch (e: Throwable) {
+            Log.e("", "${e.message}", e)
+        }
+    }
+
+    private suspend fun DefaultClientWebSocketSession.outputSeats() {
+        try {
+            outputEventChannel.consumeEach {
+                Log.d("onOutputSeats", it)
                 send(it)
             }
         } catch (e: Throwable) {
@@ -112,6 +179,13 @@ class SeatSelectionViewModel : ViewModel() {
                     arrayList.add(gson.fromJson(jsonArray.getString(i), Ticket::class.java))
                 reservedSeats.postValue(arrayList)
             }
+            "reservedTicketList" -> {
+                val jsonArray = JSONArray(properties.getProperty("data"))
+                val arrayList = ArrayList<Ticket>()
+                for (i in 0 until jsonArray.length())
+                    arrayList.add(gson.fromJson(jsonArray.getString(i), Ticket::class.java))
+                outReserved.postValue(arrayList)
+            }
         }
     }
 
@@ -119,6 +193,12 @@ class SeatSelectionViewModel : ViewModel() {
         reservedSeats.value!!.forEach {
             if (it.idseat == seatId)
                 return true
+        }
+        if (outReserved.value != null) {
+            outReserved.value?.forEach {
+                if (it.idseat == seatId)
+                    return true
+            }
         }
         return false
     }
@@ -149,6 +229,7 @@ class SeatSelectionViewModel : ViewModel() {
 
     companion object {
         private const val PATH_MY_RESERVATIONS = "$PATH_APP/myreservations"
+        private const val PATH_SEATS = "$PATH_APP/seats"
     }
 
 }

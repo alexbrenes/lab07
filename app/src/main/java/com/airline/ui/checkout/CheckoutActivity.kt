@@ -33,7 +33,6 @@ class CheckoutActivity : AppCompatActivity() {
         _binding = ActivityCheckoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         checkoutViewModel.paymentmethods.observe(this) {
-            Log.d("PaymentMethods", "INGRESAROOOON")
             val paymentMethod = findViewById<Spinner>(R.id.paymentMethod)
             val arr = it.toTypedArray()
             var adapterMethods =
@@ -97,7 +96,7 @@ class CheckoutActivity : AppCompatActivity() {
                 spinner.selectedItem.toString(),
                 binding.NumbSistAmount.text.toString().toInt()
             )
-//            finish()
+            finish()
         }
         binding.btnCancel.setOnClickListener {
             Log.d("RESERVAR", "CANCELAR")

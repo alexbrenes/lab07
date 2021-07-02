@@ -9,7 +9,6 @@ import com.airline.PATH_APP
 import com.airline.PORT
 import com.airline.logic.Journey
 import com.airline.logic.Paymentmethod
-import com.airline.logic.Reservation
 import com.google.gson.Gson
 import com.lab04.logic.User
 import io.ktor.client.*
@@ -20,8 +19,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.json.JSONObject
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
